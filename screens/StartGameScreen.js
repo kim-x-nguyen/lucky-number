@@ -1,78 +1,90 @@
-import { useState } from 'react';
-import {TextInput, View, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback} from 'react-native';
+import { useState } from "react";
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  Alert,
+  Keyboard,
+} from "react-native";
 
-import PrimaryButton from '../components/PrimaryButton';
+import Title from "../components/ui/Title";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import Card from "../components/ui/Card";
+import Colors from "../constants/colors";
+import InstructionText from "../components/ui/InstructionText";
 
-export default function StartGameScreen() {
-  const [enteredValue, setEnteredValue] = useState('');
+export default function StartGameScreen({ onPickNumber }) {
+  const [enteredValue, setEnteredValue] = useState("");
 
   function numberInputHandler(inputText) {
-    setEnteredValue(inputText)
+    setEnteredValue(inputText);
   }
 
   function resetInputHandler() {
-    setEnteredValue('');
+    setEnteredValue("");
   }
 
   function confirmInputHandler() {
     const chosenNumber = parseInt(enteredValue);
     if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
-      Alert.alert('Invalid number!', 'Number has to be a number between 1 and 99.', [{text: 'Okay', style: 'destructive', onPress: resetInputHandler}]);
+      Alert.alert(
+        "Invalid number!",
+        "Number has to be a number between 1 and 99.",
+        [{ text: "Okay", style: "destructive", onPress: resetInputHandler }]
+      );
       return;
     }
-    console.log("Valid number entered");
     Keyboard.dismiss();
     resetInputHandler();
+    onPickNumber(chosenNumber);
   }
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput style={styles.numberInput} maxLength={2} keyboardType='numeric' onChangeText={numberInputHandler} value={enteredValue}/>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+    <View style={styles.rootContainer}>
+      <Title>Guess my number!</Title>
+      <Card>
+        <InstructionText>Enter a number</InstructionText>
+        <TextInput
+          style={styles.numberInput}
+          maxLength={2}
+          keyboardType="numeric"
+          onChangeText={numberInputHandler}
+          value={enteredValue}
+        />
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+          </View>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
+          </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
-        </View>
-      </View>
+      </Card>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+  rootContainer: {
+    flex: 1,
     marginTop: 100,
-    marginHorizontal: 24,
-    backgroundColor: '#4e0329',
-    borderRadius: 8,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    alignItems: "center",
   },
   numberInput: {
     height: 48,
     width: 50,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 32,
-    borderBottomColor: '#ddb52f',
+    borderBottomColor: Colors.accent500,
     borderBottomWidth: 2,
-    color: '#ddb52f',
+    color: Colors.accent500,
     marginVertical: 8,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   buttonsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   buttonContainer: {
     flex: 1,
-  }
+  },
 });
