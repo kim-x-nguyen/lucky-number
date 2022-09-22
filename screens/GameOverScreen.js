@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import Title from "../components/ui/Title";
+import PrimaryButton from "../components/ui/PrimaryButton";
 import Colors from "../constants/colors";
 
-export default function GameOverScreen() {
+export default function GameOverScreen({rounds, userNumber, onRestart}) {
   return (
     <View style={styles.rootContainer}>
       <Title>Game Over</Title>
@@ -14,9 +15,10 @@ export default function GameOverScreen() {
         />
       </View>
       <Text style={styles.summaryText}>
-        Your phones needed <Text style={styles.highlightText}>X</Text> rounds to
-        guess the number <Text style={styles.highlightText}>Y</Text>
+        Your phones needed <Text style={styles.highlightText}>{rounds}</Text> rounds to
+        guess the number <Text style={styles.highlightText}>{userNumber}</Text>
       </Text>
+      <PrimaryButton onPress={onRestart}>NEW GAME</PrimaryButton>
     </View>
   );
 }
@@ -49,5 +51,7 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans",
     fontSize: 18,
     color: 'black',
+    textAlign: "center",
+    marginVertical: 24,
   },
 });
